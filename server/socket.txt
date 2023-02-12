@@ -1,0 +1,117 @@
+import { Socket } from "socket.io";
+
+const express = require("express");
+const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+  origin: "http://localhost:3000",
+});
+
+const { v4: uuidv4 } = require("uuid");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+app.use(bodyParser.json());
+
+type ClientType = {
+  clients: {
+    userId: string;
+    offer: any;
+  }[];
+  roomId: string;
+};
+
+type AnswerType = {
+  answer: any;
+  recieverID: string;
+  senderId: string;
+};
+
+// const emailToSocketMapping = new Map();
+// const socketToEmailMapping = new Map();
+
+// const roomToOfferMapping = new Map();
+// const roomToClientMapping = new Map();
+
+// io.on("connection", (socket: Socket) => {
+//   console.log("NEW CONNECTION");
+
+//   socket.on("ice-candidate", (data) => {
+//     const { candidate, recieverID, senderId } = data;
+//     console.log("====================================");
+//     console.log("CANDIDATE ", candidate);
+//     console.log("====================================");
+
+//     // socket.broadcast.emit("ice-candidate", data);
+//     socket.broadcast.to(recieverID).emit("ice-candidate", data);
+//   });
+
+//   // TODO: ROOM CREATED AND Room ID is sent back to the creator
+//   socket.on("room-created", ({}) => {
+//     const roomId = uuidv4();
+//     socket.join(roomId);
+//     socket.emit("room-created", { roomId });
+//     console.log("====================================");
+//     console.log(roomId);
+//     console.log("ROOOMMMMMM  ::: ", socket.rooms);
+//   });
+
+//   // TODO: client ASKS FOR CLIENtS(prev) TO SEND OFFER
+//   socket.on("join-call", async ({ roomId, userId }) => {
+//     console.log("====================================");
+//     console.log("USEr ID :: ", userId, socket.id);
+//     console.log("====================================");
+//     console.log("====================================");
+//     console.log("JOIN ROOM JOIN ROOM");
+//     socket.join(roomId);
+
+//     const clients: Set<string> = await io.sockets.adapter.rooms.get(roomId);
+//     let clientsArray: string[] = [];
+//     clients.forEach((client, index) => {
+//       // console.log("CLLL :: ", index, client);
+//       if (client !== socket.id) clientsArray.push(client);
+//     });
+
+//     console.log("====================================");
+//     socket.emit("join-call", { clients: clientsArray });
+//     console.log("CLIENtS ---- ", clientsArray);
+//   });
+
+//   // TODO: OFFER IS CREATED AND SENT TO THE SERVER
+//   socket.on("join-offer-created", ({ clients, roomId }: ClientType) => {
+//     console.log("====================================");
+//     console.log("OFFER CREATed ::-- ", clients);
+//     console.log("====================================");
+//     for (const client of clients) {
+//       console.log("====================================");
+//       console.log("LOOOPING CLIENTS :: ", client);
+//       console.log("====================================");
+//       socket.broadcast.to(client.userId).emit("call-join-offer", {
+//         offer: client.offer,
+//         senderId: socket.id,
+//       });
+//     }
+//   });
+
+//   // TODO: CLIENTS SEND BACK ANSWER FOR THE OFFER
+//   socket.on(
+//     "join-offer-answer",
+//     ({ answer, recieverID, senderId }: AnswerType) => {
+//       socket.broadcast
+//         .to(recieverID)
+//         .emit("join-offer-answer", { answer, senderId });
+//     }
+//   );
+
+//   socket.on("disconnect", () => {
+//     socket.rooms.clear();
+//     console.log("EMPTY ROOM :::", socket.rooms);
+//   });
+// });
+
+// server.listen(3001, () => console.log("Server started on 3001"));
