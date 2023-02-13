@@ -1,14 +1,16 @@
-import { MediaStreamProvider } from "@/contexts/MediaStreamContext";
-import { SocketProvider } from "@/contexts/SocketIoContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { SocketProvider } from "@/contexts/SocketIoContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <SocketProvider>
-      {/* <MediaStreamProvider> */}
+    // <SocketProvider>
+    // {/* <MediaStreamProvider> */}
+    <UserProvider>
       <Component {...pageProps} />
-      {/*  </MediaStreamProvider> */}
-    </SocketProvider>
+    </UserProvider>
+    // {/*  </MediaStreamProvider> */}
+    // </SocketProvider>
   );
 }
