@@ -20,7 +20,6 @@ const Button = ({ type, value, onClick, onSubmit }: Props) => {
         return onClick && onClick(e);
       }}
       onSubmit={(e) => {
-        e.preventDefault();
         return onSubmit && onSubmit(e);
       }}
     >
