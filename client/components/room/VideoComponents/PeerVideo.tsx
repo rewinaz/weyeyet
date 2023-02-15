@@ -22,19 +22,24 @@ const VideoComponent = ({ stream, muted }: Props) => {
   };
 
   useEffect(() => {
-    getLocalStream();
+    // getLocalStream();
   }, []);
   return (
-    <video
-      id="local"
+    <img
       className=" w-full h-full rounded-2xl border-2 object-cover bg-white "
-      ref={(video) => {
-        if (video) video.srcObject = localStream;
-      }}
-      muted={muted}
-      autoPlay
-      playsInline
-    ></video>
+      src={"../../../public/next.svg"}
+      alt="stream"
+    />
+    // <video
+    //   id="local"
+    //   className=" w-full h-full rounded-2xl border-2 object-cover bg-white "
+    //   ref={(video) => {
+    //     if (video) video.srcObject = localStream;
+    //   }}
+    //   muted={muted}
+    //   autoPlay
+    //   playsInline
+    // ></video>
   );
 };
 

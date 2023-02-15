@@ -16,7 +16,7 @@ const PeerVideosWrapper = ({}: Props) => {
   return (
     // <div className=" bg-white-600 w-full flex-1 py-10 px-28 grid grid-cols-4 gap-2">
     <Grid item container spacing={3} className=" w-11/12 m-auto">
-      <Grid item xs={12} sm={6} md={4} height={300}>
+      {/* <Grid item xs={12} sm={6} md={4} height={300}>
         <PeerVideo key={uuid()} stream={""} muted={true} />
       </Grid>
       <Grid item xs={12} sm={6} md={4} height={300}>
@@ -27,22 +27,7 @@ const PeerVideosWrapper = ({}: Props) => {
       </Grid>
       <Grid item xs={12} sm={6} md={4} height={300}>
         <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} height={300}>
-        <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} height={300}>
-        <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} height={300}>
-        <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} height={300}>
-        <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} height={300}>
-        <PeerVideo key={uuid()} stream={""} muted={true} />
-      </Grid>
+      </Grid> */}
 
       {/* {remoteStreams && (
 		  <>

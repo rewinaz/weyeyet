@@ -22,9 +22,7 @@ const SideBarMenuButton = ({ MaterialIcon, onClick }: Props) => {
 
     <div
       className="bg-bc-s-darkblue hover:bg-bc-violet-500 h-14 w-14 flex items-center justify-center overflow-hidden transition-colors rounded-2xl cursor-pointer my-4 mx-4 p-2"
-      onClick={(e) => {
-        onClick(e);
-      }}
+      onClick={onClick}
     >
       {<MaterialIcon fontSize="large" />}
     </div>
