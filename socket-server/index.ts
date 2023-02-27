@@ -6,30 +6,24 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   origin: "http://localhost:3000",
 });
-
-const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
+const RoomSchema = require("./models/room");
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
   })
 );
-
-const socketToEmailMapping: Map<string, string> = new Map();
-const socketToRoomMapping: Map<string, string> = new Map();
+app.use(express.json());
 
 io.on("connection", (socket: Socket) => {
   console.log("====================================");
   console.log("SOCKET CONNECTED");
 
-  socket.on("room:created", ({ roomId, email }: any) => {
+  socket.on("room:created", ({ roomId }: any) => {
     console.log("SOCKET ROOM CREATED", roomId, " ", socket.id);
-
-    if (roomId && email) {
+    if (roomId) {
       socket.join(roomId);
-      socketToEmailMapping.set(socket.id, email);
-      socketToRoomMapping.set(socket.id, roomId);
     }
   });
 
@@ -37,32 +31,42 @@ io.on("connection", (socket: Socket) => {
     console.log("SOCKET ROOM JOINED", roomId, " - ", socket.id);
     if (roomId && email) {
       socket.join(roomId);
-      socketToEmailMapping.set(socket.id, email);
-      socketToRoomMapping.set(socket.id, roomId);
 
-      socket.broadcast.to(roomId).emit("user:joined", { email });
+      try {
+        const room = await RoomSchema.findById(roomId);
 
-      // Send the previous users to the new user
-      //       const prevUsers = Array.from(roomToEmailMapping.get(roomId) || []).filter(
-      //         (userEmail) => userEmail !== email
-      //       );
-      let usersInRoom: Set<string> = await io.sockets.adapter.rooms.get(roomId);
+        // SENDING Room members to the new user
+        const users = room.streams
+          .map((stream: any) => stream.get("email"))
+          .filter((email: string) => email !== email);
+        socket.emit("room:previous:users", { users: users });
 
-      let prevUsers: string[] = [];
-      for (const user of usersInRoom) {
-        if (user !== socket.id) {
-          if (socketToEmailMapping.get(user))
-            prevUsers.push(socketToEmailMapping.get(user)!);
-        }
+        socket.broadcast.to(roomId).emit("room:new:user", { email });
+      } catch (err) {
+        console.log(err);
       }
 
-      console.log("PREV USERS", prevUsers);
+      // TODO SEND THE STREAMS TO THE NEW USER
+      // const filteredStreams = room.streams.filter(
+      //   (stream: any) => stream.get("email") !== email
+      // );
+      // socket.broadcast
+      //   .to(roomId)
+      //   .emit("user:joined", { email, streams: filteredStreams });
 
-      socket.emit("previous:users", { emails: [...prevUsers], room: roomId });
+      // Send the previous users to the new user
+      // let usersInRoom: Set<string> = await io.sockets.adapter.rooms.get(roomId);
+
+      // console.log("PREV USERS", prevUsers);
+
+      // socket.emit("previous:users", { emails: [...prevUsers], room: roomId });
     }
   });
 
   socket.on("disconnect", () => {});
 });
 
+app.listen(3001, () => {
+  console.log("Server started on port 3001");
+});
 server.listen(3002, () => console.log("Server started on 3002"));
